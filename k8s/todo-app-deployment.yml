@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: todo-app
-          image: obaidr/todo-app
+          image: shehzadaslamoza/todo-app
           ports:
             - containerPort: 3000
           env:
