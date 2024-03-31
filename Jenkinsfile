@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout Source') {
             steps {
                 // Checkout the source code from your Git repository
-                git 'https://github.com/ShehzadAslamOza/devops-jenkins-todoapp'
+                git 'https://github.com/ShehzadAslamOza/devops-jenkins-todoapp.git'
             }
         }
 
