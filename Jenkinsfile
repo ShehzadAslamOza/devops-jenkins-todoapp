@@ -3,18 +3,19 @@ pipeline {
 
     environment {
         dockerImageName = "shehzadaslamoza/todo-app"
+        kubeconfigCredentialId = 'kubeconfig-file'
     }
 
     stages {
         stage('Checkout Source') {
-    steps {
-        // Checkout the source code from your Git repository
-        git branch: 'main', url: 'https://github.com/ShehzadAslamOza/devops-jenkins-todoapp.git'}}
+            steps {
+                git branch: 'main', url: 'https://github.com/ShehzadAslamOza/devops-jenkins-todoapp.git'
+            }
+        }
 
         stage('Build Image') {
             steps {
                 script {
-                    // Build the Docker image using the Dockerfile in your repository
                     dockerImage = docker.build dockerImageName
                 }
             }
@@ -26,7 +27,6 @@ pipeline {
             }
             steps {
                 script {
-                    // Push the Docker image to Docker Hub
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         dockerImage.push("latest")
                     }
@@ -37,8 +37,12 @@ pipeline {
         stage('Deploying todoapp container to Minikube') {
             steps {
                 script {
-                    // Apply the Kubernetes deployment and service configurations
-                    kubernetesDeploy(configs: "k8s/todo-app-deployment.yml", "k8s/secrets.yaml")
+                    // Set KUBECONFIG environment variable to use kubeconfig credential
+                    withCredentials([file(credentialsId: kubeconfigCredentialId, variable: 'KUBECONFIG')]) {
+                        // Apply the Kubernetes deployment and service configurations
+                        bat 'kubectl apply -f ./k8s/secrets.yml'
+                        bat 'kubectl apply -f ./k8s/todo-app-deployment.yml'
+                    }
                 }
             }
         }
