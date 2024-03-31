@@ -7,11 +7,9 @@ pipeline {
 
     stages {
         stage('Checkout Source') {
-            steps {
-                // Checkout the source code from your Git repository
-                git 'https://github.com/ShehzadAslamOza/devops-jenkins-todoapp.git'
-            }
-        }
+    steps {
+        // Checkout the source code from your Git repository
+        git branch: 'main', url: 'https://github.com/ShehzadAslamOza/devops-jenkins-todoapp.git'}}
 
         stage('Build Image') {
             steps {
